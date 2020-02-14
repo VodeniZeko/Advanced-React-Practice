@@ -1,6 +1,8 @@
 import React from "react";
 import axios from "axios";
 import "./App.css";
+import { PlayersCard } from "./components/PlayerCard";
+import { Nav } from "./components/Nav";
 
 class App extends React.Component {
   constructor() {
@@ -11,18 +13,24 @@ class App extends React.Component {
   }
   componentDidMount() {
     axios.get(`http://localhost:5000/api/footballers`).then(res => {
-      console.log(typeof res.data);
+      this.setState({
+        players: res.data
+      });
     });
   }
   render() {
     return (
       <div className="App">
-        <h1>
-          Happy building{" "}
-          <span role="img" aria-label="Smiling emoji">
-            😃
-          </span>
-        </h1>
+        <Nav />
+        <div>
+          {this.state.players ? (
+            this.state.players.map(player => {
+              return <PlayersCard player={player} />;
+            })
+          ) : (
+            <p>whoops no data</p>
+          )}
+        </div>
       </div>
     );
   }
